@@ -2,7 +2,7 @@
 <div>
     <h4 class="text-center mb-2">Date despre client</h4>
     <div class="form-check form-switch mb-2">
-        <input class="form-check-input" type="checkbox" role="switch" :model="JuridicPerson" @change="emitEventChanged" id="flexSwitchCheckDefault">
+        <input class="form-check-input" type="checkbox" role="switch" v-model="JuridicPerson" @change="emitEventChanged" id="flexSwitchCheckDefault">
         <label class="form-check-label" for="flexSwitchCheckDefault">Persoana Juridica</label>
     </div>
     <div class="row row-cols-3">
@@ -14,13 +14,13 @@
         </div>
         <div class="col-sm" v-if="JuridicPerson">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="text" class="form-control" id="floatingInput" v-model="clientJId" @change="emitEventChanged" placeholder="name@example.com">
                 <label for="floatingInput">CUI</label>
             </div>
         </div>
         <div class="col-sm" v-if="JuridicPerson">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="text" class="form-control" id="floatingInput" v-model="clientReg" @change="emitEventChanged" placeholder="name@example.com">
                 <label for="floatingInput">Reg</label>
             </div>
         </div>
@@ -51,7 +51,9 @@ export default {
             input_two: '',
             clientName: '',
             clientPhone: '',
-            clientEmail: ''
+            clientEmail: '',
+            clientJId: '',
+            clientReg: ''
         }
     },
     methods: {
@@ -61,7 +63,9 @@ export default {
                     "clientType": this.JuridicPerson,
                     "clientName": this.clientName,
                     "clientPhone": this.clientPhone,
-                    "clientEmail": this.clientEmail
+                    "clientEmail": this.clientEmail,
+                    "clientJId": this.clientJId,
+                    "clientReg": this.clientReg
                 }
             ]);
         }

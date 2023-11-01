@@ -39,47 +39,59 @@ const register = async (req, res) => {
 
 const CreateNewVehicle = async (req, res) => {
   try {
-    var clientData = req.body[0];
-    var vehicleData = req.body[1];
-    var clientId;
-    let { clientName, clientType, clientEmail, clientPhone } = clientData
-    let { clientVehicleNumber, clientVehicleVIN, clientVehicleMake, clientVehicleModel, clientVehicleYear, clientVehiclePower, clientVehicleGas, clientVehicleCapacity, clientVehicleOdometer, clientVehicleTasks, clientVehicleRTasks} = vehicleData
-    const client_db = await Client.findOne({ where: { clientName } });
-    if (!client_db) {
-        (clientType) ? clientType = 2 : clientType = 1;
-        const new_client = await Client.create({
-            clientType: clientType, 
-            clientName: clientName, 
-            clientId: '', 
-            clientPhone: clientPhone, 
-            clientEmail: clientEmail, 
-            clientReg: ''
-          });
-          console.log(new_client.id);
-        res.json({ message: "Client registered successfully"});
+    // Define the clientId variable outside of the if statement.
+    let clientId;
+  
+    const { clientName, clientType, clientEmail, clientPhone, clientJId, clientReg } = req.body[0];
+    const { clientVehicleNumber, clientVehicleVIN, clientVehicleMake, clientVehicleModel, clientVehicleYear, clientVehiclePower, clientVehicleGas, clientVehicleCapacity, clientVehicleOdometer, clientVehicleTasks, clientVehicleRTasks } = req.body[1];
+  
+    // Check if the client already exists in the database.
+    const clientDb = await Client.findOne({ where: { clientName } });
+  
+    // If the client does not exist, create a new client.
+    if (!clientDb) {
+      try {
+        const newClient = await Client.create({
+          clientType: clientType || 2,
+          clientName,
+          clientJId,
+          clientPhone,
+          clientEmail,
+          clientReg,
+        });
+  
+        // Set the client ID to the ID of the new client.
+        clientId = newClient.id;
+
+      } catch (error) {
+        // Send a response with the error message.
+        res.status(500).json(error);
+      }
+    } else {
+      // Set the client ID to the ID of the existing client.
+      clientId = clientDb.id;
     }
-    (client_db) ? clientId = client_db.id : clientId = new_client.id;
-    const new_vehicle = await Vehicle.create({
-        clientId: clientId, 
-        vehiclePlate: clientVehicleNumber, 
-        vehicleVIN: clientVehicleVIN, 
-        vehicleMake: clientVehicleMake, 
-        vehicleModel: clientVehicleModel, 
-        vehicleYear: clientVehicleYear, 
-        vehiclePower: clientVehiclePower, 
-        vehicleGas: clientVehicleGas, 
-        vehicleCapacity: clientVehicleCapacity, 
-        vehicleOdometer: clientVehicleOdometer, 
-        vehicleTask: clientVehicleTasks, 
-        vehicleRecomTask: clientVehicleRTasks
+  
+    // Create a new vehicle for the client.
+    await Vehicle.create({
+      clientId,
+      vehiclePlate: clientVehicleNumber,
+      vehicleVIN: clientVehicleVIN,
+      vehicleMake: clientVehicleMake,
+      vehicleModel: clientVehicleModel,
+      vehicleYear: clientVehicleYear,
+      vehiclePower: clientVehiclePower,
+      vehicleGas: clientVehicleGas,
+      vehicleCapacity: clientVehicleCapacity,
+      vehicleOdometer: clientVehicleOdometer,
+      vehicleTask: clientVehicleTasks,
+      vehicleRecomTask: clientVehicleRTasks,
     });
-    console.log(new_vehicle.id)
-    // Create a user record in the database
-    console.log(vehicleData)
-    console.log(clientData.clientName)
-    res.json(clientData);
-    
+  
+    // Send a response message indicating that the vehicle was registered successfully.
+    res.json({ message: 'Vehicle registered successfully' });
   } catch (error) {
+    // Send a response with the error message.
     res.status(500).json(error);
   }
 }

@@ -32,7 +32,7 @@
               <h5 class="card-title">Masini in service</h5>
               <div class="card-body">
                 <div class="table-responsive">
-              <table class="table">
+              <table class="table" v-if="vehicles">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -41,12 +41,13 @@
                     <th scope="col"></th>
                   </tr>
                 </thead>
-                <tbody v-if="vehicles">
+                <tbody>
                   <tr v-for="vehicle, index in vehicles" :key="index">
                     <th scope="row">{{vehicle.id}}</th>
                     <td>{{vehicle.vehiclePlate}}</td>
                     <td>{{vehicle.clientId}}</td>
                     <td>
+                      <button class="btn btn-secondary">Afiseaza informatii</button>
                     </td>
                   </tr>
                 </tbody>
@@ -158,6 +159,7 @@ export default {
     {
       axios
       .post('http://localhost:3000/vehicle/CreateNewVehicle', this.input_three)
+      .then(this.showAllVehicles);
     },
     swapComponent (component)
     {
