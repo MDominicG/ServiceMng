@@ -1,24 +1,32 @@
-import { createRouter, createMemoryHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import VehicleView from "../views/VehicleView.vue";
+import VehiclesView from "../views/VehiclesView.vue";
 import axios from "../axios";
 import { store } from "../store";
 
 const router = createRouter({
-  history: createMemoryHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
       name: "home",
       component: HomeView,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
-      path: '/vehicles/:id',
+      path: '/vehicle/:id',
       name: 'vehicle',
       component: VehicleView,
       props: route => ({ id: route.params.id }),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/vehicles',
+      name: 'vehicles',
+      component: VehiclesView,
+      props: route => ({ id: route.params.id }),
+      meta: { requiresAuth: false },
     },
     {
       path: "/login",

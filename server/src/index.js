@@ -3,6 +3,7 @@ const express = require('express');
 const authRoute = require('./routes/authRoutes');
 const profileRoute = require('./routes/profileRoute');
 const vehiclesRoute = require('./routes/vehicleRoutes');
+const customerRoutes = require('./routes/customerRoutes');
 const cors = require('cors');
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
 app.use('/vehicle', vehiclesRoute);
+app.use('/customer', customerRoutes);
 
 
 app.listen(process.env.PORT, () => {

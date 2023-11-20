@@ -147,14 +147,34 @@ const ShowAllVehicles = async (req, res) => {
           
           // Get the vehicles with client names and return them as JSON.
           const vehicles = await getVehiclesWithClientNames();
-          console.log(vehicles)
           return res.json(vehicles);
     } catch (error) {
       res.status(500).json({ error: "Error failed" });
     }
   }
 
+const GetVehicleDetails = async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) {
+        res.status(400).json({ error: "Id field is required" });
+      } else {
+        // Find the user by email
+        const vehicle_db = await Vehicle.findOne({ where: { id } });
+
+        if (!vehicle_db) {
+          return res.status(404).json({ error: "Vehicle not found" });
+        } else {
+            res.json(vehicle_db);
+          }
+        }
+      } catch (error) {
+      res.status(500).json({ error: "Error failed" });
+    }
+}
+
 module.exports = {
     CreateNewVehicle,
-    ShowAllVehicles
+    ShowAllVehicles,
+    GetVehicleDetails
   };

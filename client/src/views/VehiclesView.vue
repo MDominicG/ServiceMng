@@ -1,33 +1,20 @@
 <template>
-  <div>  
-  <Topbar/>
+  <div>
+    <Topbar />
 
-<div class="container-fluid">
-  <div class="row">
-    
-    <Sidebar/>
+    <div class="container-fluid">
+      <div class="row">
+        <Sidebar />
 
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Panoul Principal</h1>
-        <!-- <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand"><div class=""></div></div>
+            <div class="chartjs-size-monitor-shrink"><div class=""></div></div>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            This week
-          </button>
-        </div> -->
-      </div>
-
-      <div class="row row-cols-1 gx-2 mb-2">
-        <div class="col-sm">
-          <ShowAllUsers/>
-        </div>
-        <div class="col-sm">
-          <div class="card h-100">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Masini in service</h1> 
+          </div>
+          <div class="card">
             <div class="card-body">
               <h5 class="card-title">Masini in service</h5>
               <div class="card-body">
@@ -102,70 +89,37 @@
             </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
-
-      <h2>Section title</h2>
-    </main>
+    </div>
   </div>
-</div>
-</div>
 </template>
 <script>
-  import ComponentOne from "@/components/vehiclesComponent/ComponentOne.vue"
-  import ComponentTwo from "@/components/vehiclesComponent/ComponentTwo.vue"
-  import ShowAllUsers from "@/components/usersComponent/ShowAllUsers.vue"
-  import Sidebar from '@/components/Sidebar.vue'
-  import Topbar from '@/components/Topbar.vue'
-  import axios from "@/axios"
+import Sidebar from "@/components/Sidebar.vue";
+import Topbar from "@/components/Topbar.vue";
+import axios from "@/axios";
 
 export default {
   data() {
     return {
-      currentComponent: 'ComponentOne',
-      componentsArray: ['ComponentOne', 'ComponentTwo'],
-      input_one: [],
-      input_two: [],
-      input_three: [],
       vehicles: []
     }
   },
   components: {
     Sidebar,
     Topbar,
-    ComponentOne,
-    ComponentTwo,
-    ShowAllUsers
-  },
-  mounted() {
-    this.showAllVehicles();
   },
   methods: {
-    async showAllVehicles() {
+    async GetAllVehicles() {
       axios.get('http://localhost:3000/vehicle/ShowAllVehicles')
         .then((res)=>{
           this.vehicles = res.data
         }).catch(err=>console.log(err))
+      return this.vehicleData
     },
-    doSomenthing ( data ) {
-      if(this.currentComponent == 'ComponentOne')
-        this.input_one = data;
-      else
-        this.input_two = data;
-
-        this.input_three = this.input_one.concat(this.input_two);
-    },
-    createNewVehicle()
-    {
-      axios
-      .post('http://localhost:3000/vehicle/CreateNewVehicle', this.input_three)
-      .then(this.showAllVehicles);
-    },
-    swapComponent (component)
-    {
-      this.currentComponent = component;
-      console.log(this.currentComponent)
-    },
+  },
+  beforeMount(){
+    this.GetAllVehicles()
   }
-}
+};
 </script>
