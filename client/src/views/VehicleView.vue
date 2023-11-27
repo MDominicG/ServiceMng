@@ -206,7 +206,6 @@ export default {
   components: {
     Sidebar,
     Topbar,
-    GDPRPDF
   },
   methods: {
     async GetVehicleDetails() {

@@ -173,8 +173,23 @@ const GetVehicleDetails = async (req, res) => {
     }
 }
 
+const DeleteSelectedVehicle = async (req, res) => {
+  try {
+    const { id } = req.body;
+      if (!id) {
+        res.status(400).json({ error: "Id field is required" });
+      } else {
+        await Vehicle.destroy({ where: { id } });
+        res.json({message: "Vehicle deleted"});
+      }
+  } catch (error) {
+    res.status(500).json({ error: "Error failed" });
+  }
+}
+
 module.exports = {
     CreateNewVehicle,
     ShowAllVehicles,
-    GetVehicleDetails
+    GetVehicleDetails,
+    DeleteSelectedVehicle
   };
